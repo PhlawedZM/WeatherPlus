@@ -1,6 +1,6 @@
 # WeatherPlus
 
-Open source weather app made using compose. Will likely feature more with time goes on as this is my test project.
+Open source weather app made using compose with some features that the main weather app does not have. It only works in the United States as of now. Will likely feature more with time goes on as this is my test project.
 [Demonstration]
 
 ## Installation Instructions
