@@ -1,7 +1,7 @@
 # WeatherPlus
 
 Open source weather app made using compose. Will likely feature more with time goes on as this is my test project.
-[Demonstration](https://youtu.be/p8af3-unmQA)
+[Demonstration]
 
 ## Installation Instructions
 
