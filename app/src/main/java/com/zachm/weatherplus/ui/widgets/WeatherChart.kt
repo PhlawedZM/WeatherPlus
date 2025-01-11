@@ -27,7 +27,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.lang.Math.round
 
+/**
+ * Basic Graph Implementation for Weather in Compose
+ * Zachary Martinson * 2024
+ */
 
+
+/**
+ * @param modifier Modifier for the canvas
+ * @param time List of times (centered around 3.5 char)
+ * @param temp List of temperatures
+ */
 @Composable
 fun WeatherChart(modifier: Modifier, time: List<String>, temp: List<Double>) {
 
@@ -51,10 +61,10 @@ fun WeatherChart(modifier: Modifier, time: List<String>, temp: List<Double>) {
 
             //Padded on the sides
             val points = List(time.size) { index ->
-                val distance = width / time.size
+                val distance = width / time.size //do time.size -1 for non padded
                 val x = index * distance
                 val y = ((maxTemp - temp[index]) / range) * height
-                Offset(x + (distance / 2), y.toFloat())
+                Offset(x + (distance / 2), y.toFloat()) //remove distance/2 for non padded
             }
 
             val path = Path().apply {
@@ -65,6 +75,7 @@ fun WeatherChart(modifier: Modifier, time: List<String>, temp: List<Double>) {
                 }
             }
 
+            //Draws our dotted lines in space
             drawPath(path,
                 color = Color.White,
                 style = Stroke(
@@ -74,12 +85,14 @@ fun WeatherChart(modifier: Modifier, time: List<String>, temp: List<Double>) {
 
             for(point in points) {
 
+                //Draws the circles
                 drawCircle(
                     color = Color.White,
                     radius = 5f,
                     center = point
                 )
 
+                //Draws the time
                 drawText(
                     textMeasurer = measurer,
                     text = time[points.indexOf(point)],
@@ -87,6 +100,7 @@ fun WeatherChart(modifier: Modifier, time: List<String>, temp: List<Double>) {
                     topLeft = Offset(point.x - 30F, height - 30.0F)
                 )
 
+                //Draws the temp above the circle
                 drawText(
                     textMeasurer = measurer,
                     text = "${temp[points.indexOf(point)]}°",
@@ -99,6 +113,7 @@ fun WeatherChart(modifier: Modifier, time: List<String>, temp: List<Double>) {
                     lineTo(point.x, point.y)
                 }
 
+                //Draws a faded line connecting to the time
                 drawPath(
                     path = fadedPath,
                     brush = Brush.verticalGradient(
@@ -111,7 +126,8 @@ fun WeatherChart(modifier: Modifier, time: List<String>, temp: List<Double>) {
                     style = Stroke(width = 1f)
                 )
             }
-            
+
+            //Draws a circle to highlight the current time and scroll
             drawCircle(
                 color = Color.White.copy(alpha = 0.5f),
                 radius = 10f,

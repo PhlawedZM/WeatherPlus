@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 
 class ScreenDimensions {
 
-    data class ScreenDimension(val statusBarHeight: Dp, val navigationBarHeight: Dp, val screenHeightE2E: Dp, val screenHeight: Dp)
+    data class ScreenDimension(val statusBarHeight: Dp, val navigationBarHeight: Dp, val screenHeightE2E: Dp, val screenHeight: Dp, val screenWidth: Dp)
 
     /**
      * Gets the screen dimensions.
@@ -27,7 +27,8 @@ class ScreenDimensions {
 
         val screenHeightE2E = config.screenHeightDp.dp + statusBarHeight + navigationBarHeight
         val screenHeight = config.screenHeightDp.dp
+        val screenWidth = config.screenWidthDp.dp
 
-        return ScreenDimension(statusBarHeight, navigationBarHeight, screenHeightE2E, screenHeight)
+        return ScreenDimension(statusBarHeight, navigationBarHeight, screenHeightE2E, screenHeight, screenWidth)
     }
 }

@@ -19,8 +19,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.zachm.weatherplus.R
 
+/**
+ * Card to handle weather observation stats.
+ * @param modifier Modifier for the card
+ * @param name Name of the observation
+ * @param value Value of the observation
+ * @param drawable Drawable of the observation
+ */
 @Composable
 fun ObservationCard(modifier: Modifier, name: String, value: String, drawable: Int) {
     Card(

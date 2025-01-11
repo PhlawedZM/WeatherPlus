@@ -33,22 +33,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.sp
 import com.zachm.weatherplus.HomeViewModel
 import com.zachm.weatherplus.R
 import com.zachm.weatherplus.ui.theme.night
+import com.zachm.weatherplus.util.ScreenDimensions
 
 @Composable
 fun BottomGradientBox(colors: Pair<Color, Color>, viewModel: HomeViewModel) {
-    val density = LocalDensity.current
-    val config = LocalConfiguration.current
-
-    val insets = WindowInsets.systemBars.asPaddingValues()
-    val statusBarHeight = with(density) { insets.calculateTopPadding().toPx().toDp() }
-    val navigationBarHeight = with(density) { insets.calculateBottomPadding().toPx().toDp() }
-
-    val screenHeight = config.screenHeightDp.dp + statusBarHeight + navigationBarHeight
+    val dimension = ScreenDimensions().instance()
 
     val humidity by viewModel.humidity.collectAsState()
     val pressure by viewModel.pressure.collectAsState()
@@ -57,7 +49,7 @@ fun BottomGradientBox(colors: Pair<Color, Color>, viewModel: HomeViewModel) {
     val precipitation by viewModel.precipitation.collectAsState()
     val windSpeed by viewModel.windSpeed.collectAsState()
 
-    val standardPressure = 101325
+    val standardPressure = 101325 //Pascal average
     val miles = 1609
     val km = 1000
 
@@ -66,7 +58,7 @@ fun BottomGradientBox(colors: Pair<Color, Color>, viewModel: HomeViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(screenHeight)
+            .height(dimension.screenHeightE2E)
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
@@ -77,7 +69,7 @@ fun BottomGradientBox(colors: Pair<Color, Color>, viewModel: HomeViewModel) {
             )
     ) {
 
-        Spacer(Modifier.height(statusBarHeight))
+        Spacer(Modifier.height(dimension.statusBarHeight)) //We need to offset for when user is fully scrolled
 
         Row(
             modifier = Modifier
@@ -102,7 +94,7 @@ fun BottomGradientBox(colors: Pair<Color, Color>, viewModel: HomeViewModel) {
                     .fillMaxHeight()
                     .padding(12.dp),
                 name = "Pressure",
-                value = "${(((pressure ?: 101325).toDouble() / 101325) * 100).toInt()}%",
+                value = "${(((pressure ?: standardPressure).toDouble() / standardPressure) * 100).toInt()}%",
                 drawable = R.drawable.pressure
             )
 
@@ -159,6 +151,6 @@ fun BottomGradientBox(colors: Pair<Color, Color>, viewModel: HomeViewModel) {
 
 @Preview
 @Composable
-fun preview() {
+private fun preview() {
     BottomGradientBox(colors = night, viewModel = HomeViewModel())
 }
