@@ -1,5 +1,6 @@
 package com.zachm.weatherplus
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
         viewModel.error.observe(this) {onError(it)}
         viewModel.permissionGranted.observe(this) {if(it) {viewModel.getWeather(LocationServices.getFusedLocationProviderClient(this))} }
         viewModel.database.value = WeatherDatabase.getInstance(this)
+        viewModel.switchToChat.observe(this) {if(it) {switchToChat()}}
 
         //Sets the status bar and navigation bar to transparent.
         enableEdgeToEdge(
@@ -40,6 +42,11 @@ class MainActivity : ComponentActivity() {
                 HomeScreen()
             }
         }
+    }
+
+    private fun switchToChat() {
+        val intent = Intent(this, ChatActivity::class.java)
+        startActivity(intent)
     }
 
     /**

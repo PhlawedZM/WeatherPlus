@@ -42,6 +42,7 @@ class HomeViewModel : ViewModel() {
     val longitude: MutableLiveData<Double> by lazy {MutableLiveData<Double>(null)}
     val latitude: MutableLiveData<Double> by lazy {MutableLiveData<Double>(null)}
     val database: MutableLiveData<WeatherDatabase> by lazy {MutableLiveData<WeatherDatabase>(null)}
+    val switchToChat: MutableLiveData<Boolean> by lazy {MutableLiveData<Boolean>(false)}
 
 
     //Flow for Compose

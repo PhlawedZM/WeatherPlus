@@ -34,13 +34,11 @@ val SnowParticle = 1
  * @param particleStartX Starting X position of the particles
  * @param particleStartY Starting Y position of the particles
  * @param particleSize Size of the particles
- * @param frequency Frequency of the particles (how many per second)
  */
 @Composable
-fun ParticleEmitter(modifier: Modifier, particleAmount: Int, particleStartX: Float, particleStartY: Float, particleSize: Float, particleRandomness: Float, frequency: Long, particleType: Int) {
+fun ParticleEmitter(modifier: Modifier, particleAmount: Int, particleStartX: Float, particleStartY: Float, particleSize: Float, particleRandomness: Float, particleType: Int) {
 
     val particles = remember { mutableStateListOf<Particle>() }
-    val ticks = remember { mutableIntStateOf(0) }
 
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
@@ -52,31 +50,21 @@ fun ParticleEmitter(modifier: Modifier, particleAmount: Int, particleStartX: Flo
                 repeat(particleAmount) {
                     when(particleType) {
                         RainParticle -> particles.add(Particle(particleStartX + (Random.nextFloat()*particleRandomness), particleStartY, particleSize, 70f + (Random.nextFloat()*5)))
-                        SnowParticle -> particles.add(Particle(particleStartX + (Random.nextFloat()*particleRandomness), particleStartY, particleSize, 10f + (Random.nextFloat()*5)))
+                        SnowParticle -> particles.add(Particle(particleStartX + (Random.nextFloat()*particleRandomness), particleStartY, particleSize + (Random.nextFloat()*2), 10f + (Random.nextFloat()*5)))
                     }
                 }
-
-                val delay = (1000/frequency).coerceIn(10,10000) //Clamp it to stop crazy values.
-                delay(delay)
-            }
-        }
-    }
-
-    LaunchedEffect(lifecycle) {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-            while (true) {
-                ticks.intValue++
-                delay(16) //60 FPS
+                //Removes particles with o(particleAmount) complexity. Stops frame jittering and speed ups.
+                if(particles.size > 500) {
+                    repeat(particleAmount) {
+                        particles.removeFirstOrNull()
+                    }
+                }
+                delay(16) //60FPS
             }
         }
     }
 
     Canvas(modifier = modifier) {
-        val width = size.width
-        val height = size.height
-        val tick = ticks.intValue //We don't need it, but we do need to call it to update the composable.
-
         particles.forEach {
 
             when(particleType) {
@@ -104,10 +92,6 @@ fun ParticleEmitter(modifier: Modifier, particleAmount: Int, particleStartX: Flo
             }
 
             it.y += it.gravity
-        }
-        if(ticks.intValue % 1000 == 0) {
-            //Removes all particles Out of Bounds. This also refreshing the memory in the heap.
-            particles.removeAll {it.y > height || it.x > width}
         }
     }
 

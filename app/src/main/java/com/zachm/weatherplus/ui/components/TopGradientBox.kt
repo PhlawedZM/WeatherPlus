@@ -43,17 +43,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zachm.weatherplus.HomeViewModel
-import com.zachm.weatherplus.R
-import com.zachm.weatherplus.api.Weather
-import com.zachm.weatherplus.api.WeatherResponse
-import com.zachm.weatherplus.ui.theme.ClearDark
-import com.zachm.weatherplus.ui.theme.ClearLight
-import com.zachm.weatherplus.ui.theme.NightDark
-import com.zachm.weatherplus.ui.theme.NightLight
-import com.zachm.weatherplus.ui.theme.StormDark
-import com.zachm.weatherplus.ui.theme.StormLight
-import com.zachm.weatherplus.ui.theme.SunnyDark
-import com.zachm.weatherplus.ui.theme.SunnyLight
 import com.zachm.weatherplus.ui.theme.storm
 import com.zachm.weatherplus.ui.widgets.WeatherChart
 import com.zachm.weatherplus.util.ScreenDimensions
