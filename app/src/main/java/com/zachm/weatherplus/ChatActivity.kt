@@ -19,6 +19,8 @@ class ChatActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.getClient()
+
         enableEdgeToEdge(
             navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))

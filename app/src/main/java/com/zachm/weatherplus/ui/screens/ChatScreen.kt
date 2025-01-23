@@ -14,15 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -40,7 +32,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.zachm.weatherplus.ChatViewModel
+import com.zachm.weatherplus.HomeViewModel
 import com.zachm.weatherplus.R
+import com.zachm.weatherplus.ui.components.ChatMessage
+import com.zachm.weatherplus.ui.components.ChatTextField
+import com.zachm.weatherplus.ui.components.Message
 import com.zachm.weatherplus.util.ScreenDimensions
 
 @Preview
@@ -51,11 +49,11 @@ private fun preview() {
 
 @Composable
 fun ChatScreen() {
+    val viewModel: ChatViewModel = viewModel()
 
     val dimension = ScreenDimensions().instance()
-    
-    var text by remember { mutableStateOf("") }
-    var messages = remember { mutableStateListOf<Message>() }
+
+    val messages = remember { mutableStateListOf<Message>() }
 
     Column(
         modifier = Modifier
@@ -85,69 +83,18 @@ fun ChatScreen() {
             reverseLayout = true
         ) {
             items(messages.size) { index ->
-
+                ChatMessage(messages[index])
             }
         }
 
 
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            textStyle = TextStyle(fontSize = 16.sp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .border(
-                    width = 6.dp,
-                    color = Color.Gray,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(4.dp),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.Gray,
-                unfocusedTextColor = Color.White,
-                focusedContainerColor = Color.Gray,
-                focusedTextColor = Color.White,
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                cursorColor = Color.White
-            ),
-            placeholder = {Text(text = "Type a message", color = Color.White.copy(alpha = 0.5f))},
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
-        )
+        ChatTextField {
+            viewModel.recognize(it)
+            messages.add(0, Message(it, true))
+        }
 
 
         Spacer(modifier = Modifier.height(dimension.navigationBarHeight))
 
-    }
-}
-
-data class Message(val message: String, val isUser: Boolean)
-
-@Composable
-fun ChatMessage(message: String, isUser: Boolean) {
-    Row(
-        Modifier.fillMaxWidth(),
-        horizontalArrangement = when {
-            isUser -> Arrangement.Absolute.Right
-            else -> Arrangement.Absolute.Left
-        }
-    ) {
-
-        Card(
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.LightGray
-            ),
-            modifier = Modifier
-                .padding(20.dp)
-        ) {
-            Text(
-                text = "How are you doing today?",
-                color = Color.DarkGray,
-                modifier = Modifier.padding(10.dp)
-            )
-
-        }
     }
 }
