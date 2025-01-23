@@ -23,7 +23,7 @@ After that is done build with gradle.
 
 
 ### Planned Features
-- Rain and Snow using Canvas (just circles)
-- Chatbot. (Probably using Tokenizer but maybe MobileBERT with tflite)
-- Settings Page with Theme Options
-- More settings, like helping people with sleep. (Thats why there is space at the bottom)
+- Rain and Snow using Canvas [DONE]
+- Chatbot. [50% - Planned to use on-device. Will have to explore other options]
+- Settings Page with Theme Options [0%]
+- More settings, like helping people with sleep. [33%]
