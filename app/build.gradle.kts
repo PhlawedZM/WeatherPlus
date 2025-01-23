@@ -41,6 +41,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.entity.extraction)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

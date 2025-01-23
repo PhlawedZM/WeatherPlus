@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.zachm.weatherplus.api.LocationResponse
 import com.zachm.weatherplus.api.Observation
 import com.zachm.weatherplus.api.ObservationFeature
 import com.zachm.weatherplus.api.Period
@@ -41,6 +42,7 @@ class HomeViewModel : ViewModel() {
     val longitude: MutableLiveData<Double> by lazy {MutableLiveData<Double>(null)}
     val latitude: MutableLiveData<Double> by lazy {MutableLiveData<Double>(null)}
     val database: MutableLiveData<WeatherDatabase> by lazy {MutableLiveData<WeatherDatabase>(null)}
+    val switchToChat: MutableLiveData<Boolean> by lazy {MutableLiveData<Boolean>(false)}
 
 
     //Flow for Compose
@@ -89,6 +91,10 @@ class HomeViewModel : ViewModel() {
     private val _refreshing = MutableStateFlow(false)
     val refreshing: StateFlow<Boolean> get() = _refreshing
 
+    private val _location = MutableStateFlow<List<LocationResponse>?>(null)
+    val location: StateFlow<List<LocationResponse>?> get() = _location
+
+
 
     /**
      * Fetches weather from Weather.gov (United States Only)
@@ -115,6 +121,7 @@ class HomeViewModel : ViewModel() {
 
                         getUpcomingWeather()
                         getUpcomingObservation()
+
                         loading.value = false
                         _refreshing.value = false
                     }
@@ -129,11 +136,38 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun fetchLocation(place: String) {
+        viewModelScope.launch {
+
+            withTimeout(5000) {
+                try {
+
+                    _location.value = RetroFit().getLocation(place)
+                    _location.value?.let {
+                        if(it[0].displayName.contains("United States")) {
+                            latitude.value = it[0].lat.toDouble()
+                            longitude.value = it[0].lon.toDouble()
+                            fetchWeather()
+                        }
+                        else {
+                            Log.e("HomeViewModel", "Non-United States location entered.")
+                            error.value = "Please enter a United States location."
+                        }
+                    }
+                }
+                catch (e: Exception) {
+                    Log.e("HomeViewModel", "Error fetching weather.", e)
+                    error.value = "Failed to get location."
+                }
+            }
+        }
+    }
+
     /**
      * Gets the weather from the api. Uses GPS to get the location.
      */
     @SuppressLint("MissingPermission") //IDE being static flags this incorrectly.
-    fun getWeather(locationManager: FusedLocationProviderClient) {
+    fun getWeather(locationManager: FusedLocationProviderClient) { //TODO Edge case where location isn't turned on
         if (permissionGranted.value == true) { //Need to make sure we have permissions
 
             viewModelScope.launch {
@@ -173,6 +207,7 @@ class HomeViewModel : ViewModel() {
                     it.properties.periods.forEach { hour ->
                         val hourTime = OffsetDateTime.parse(hour.startTime).toLocalDateTime()
 
+                        //Get the time after the current hour and fill up til we hit a size of 24
                         if (hourTime.isAfter(currentTime) && time.value.size < maxSize) {
                             _time.value.add(DateTimeFormatter.ofPattern("h a").format(hourTime)) //Used for AM PM.
                             _temp.value.add(hour.temperature.toDouble())
@@ -193,7 +228,7 @@ class HomeViewModel : ViewModel() {
                 }
                 catch (e: Exception) {
                     Log.e("HomeViewModel", "Error getting upcoming weather.", e)
-                    error.value = e.message
+                    error.value = "Failed to get weather."
                 }
             }
         }
@@ -232,11 +267,12 @@ class HomeViewModel : ViewModel() {
             viewModelScope.launch {
                 try {
                     val currentTime = LocalDateTime.now()
-                    var idx = 0
+                    var idx = 0 //We need an index for edge case of out of bounds
 
                     it.features.forEachIndexed { index, it ->
                         val hourTime = OffsetDateTime.parse(it.properties.timestamp).toLocalDateTime()
 
+                        //Current hour
                         if(hourTime.hour == currentTime.hour && hourTime.dayOfYear == currentTime.dayOfYear) {
                             _pressure.value = it.properties.barometricPressure?.value ?: 0
                             _visibility.value = it.properties.visibility?.value ?: 0

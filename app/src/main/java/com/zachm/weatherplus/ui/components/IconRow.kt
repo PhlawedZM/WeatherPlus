@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -34,7 +35,7 @@ fun IconRow(onLocationClicked: () -> Unit, onQuestionClicked: () -> Unit, onSett
                 painter = painterResource(id = R.drawable.location_on),
                 contentDescription = "Location",
                 tint = Color.White,
-                modifier = Modifier.scale(0.9f)
+                modifier = Modifier.size(36.dp)
             )
         }
 
@@ -43,7 +44,7 @@ fun IconRow(onLocationClicked: () -> Unit, onQuestionClicked: () -> Unit, onSett
             modifier = Modifier.clickable { onQuestionClicked() }
         ) {
             Text(
-                text = "Ask a Question?",
+                text = "Ask a Question? ",
                 color = Color.White,
                 fontSize = 17.sp
             )
@@ -51,7 +52,7 @@ fun IconRow(onLocationClicked: () -> Unit, onQuestionClicked: () -> Unit, onSett
                 painter = painterResource(id = R.drawable.chat),
                 contentDescription = "Chat",
                 tint = Color.White,
-                modifier = Modifier.scale(0.7f)
+                modifier = Modifier.size(28.dp)
             )
         }
 
@@ -62,7 +63,7 @@ fun IconRow(onLocationClicked: () -> Unit, onQuestionClicked: () -> Unit, onSett
                 painter = painterResource(id = R.drawable.settings),
                 contentDescription = "Settings",
                 tint = Color.White,
-                modifier = Modifier.scale(0.9f)
+                modifier = Modifier.size(36.dp)
             )
         }
     }
