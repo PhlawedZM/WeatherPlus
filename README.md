@@ -3,6 +3,10 @@
 Open source weather app made using compose with some features that the main weather app does not have. It only works in the United States as of now. Will likely feature more with time goes on as this is my test project.
 [Demonstration]
 
+![](https://github.com/zacharymartinson/WeatherPlus/blob/master/WeatherPlus1.jpg)
+![](https://github.com/zacharymartinson/WeatherPlus/blob/master/WeatherPlus3.jpg)
+![](https://github.com/zacharymartinson/WeatherPlus/blob/master/WeatherPlus2.jpg)
+
 ## Installation Instructions
 
 Follow these steps to get the project up and running on your local machine:
