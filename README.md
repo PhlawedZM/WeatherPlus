@@ -5,7 +5,7 @@ Open source weather app made using compose with some features that the main weat
 
 ![](https://github.com/zacharymartinson/WeatherPlus/blob/master/WeatherPlus1.jpg)
 ![](https://github.com/zacharymartinson/WeatherPlus/blob/master/WeatherPlus3.jpg)
-![](https://github.com/zacharymartinson/WeatherPlus/blob/master/WeatherPlus2.jpg)
+![](https://raw.githubusercontent.com/zacharymartinson/WeatherPlus/75a9dd906592825034c344b5aae4379c134601e0/WeatherPlus2.jpg)
 
 ## Installation Instructions
 
